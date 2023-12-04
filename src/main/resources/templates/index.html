@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="css">
+    <style>
+        .hr {
+            margin: 30px 0;
+        }
+        .about-container {
+            display: flex;
+            justify-content: space-between;
+            margin: -10px auto 0;
+        }
+        .about-container-title {
+            font-size: 32px;
+            font-weight: 600;
+            height: 18%;
+        }
+        .profile-img {
+            width: 300px;
+            height: 300px;
+            border-radius: 100%;
+            border: solid 1px #ccc;
+            overflow: hidden;
+        }
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-element {
+            width: calc(100% - 400px);
+        }
+        .about-comment {
+            height: 17%;
+            margin: 5px 0 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            word-wrap: break-word;
+        }
+        .about-elements {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 54%;
+        }
+        .about-element {
+            display: flex;
+            width: 100%;
+        }
+        .about-element-title {
+            width: 180px;
+        }
+        .skill-container {
+            margin: 0 auto -10px;
+        }
+        .skill-container-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0 auto 12px;
+        }
+        .skill-elements {
+            display: flex;
+            justify-content: space-between;
+        }
+        .skill-element {
+            display: flex;
+            flex-direction: column;
+            width: 24%;
+            height: 200px;
+            border-radius: 15px;
+            border: #ccc 1px solid;
+        }
+        .skill-element-title {
+            display: flex;
+            height: 12%;
+            justify-content: center;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .skill-element ul {
+            height: 88%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow: auto;
+        }
+        .skill-element-empty {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="about-container">
+        <div class="profile-img">
+            <img th:src="${data.image} ? ${data.image.imgUrl} : 'image/default user.png'" />
+        </div>
+        <div class="profile-element">
+            <div class="about-container-title">About me</div>
+            <div th:utext="${#strings.replace(data.comment, nlString, '&lt;br /&gt;')}" class="about-comment"></div>
+            <div class="about-elements">
+                <div class="about-element">
+                    <div class="about-element-title">Name :</div>
+                    <div th:text="${data.name}"></div>
+                </div>
+                <div class="about-element">
+                    <div class="about-element-title">Address :</div>
+                    <div th:text="${data.address}"></div>
+                </div>
+                <div class="about-element">
+                    <div class="about-element-title">Email :</div>
+                    <div th:text="${data.email}"></div>
+                </div>
+                <div class="about-element">
+                    <div class="about-element-title">Phone :</div>
+                    <div th:text="${data.phone}"></div>
+                </div>
+                <div class="about-element">
+                    <div class="about-element-title">Github :</div>
+                    <div th:text="${data.github}"></div>
+                </div>
+                <div class="about-element">
+                    <div class="about-element-title">Education :</div>
+                    <div th:text="${data.education}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hr"></div>
+    <div class="skill-container">
+        <div class="skill-container-title">Technical Skills</div>
+        <div class="skill-elements">
+            <div class="skill-element">
+                <div class="skill-element-title">Front-End</div>
+                <div class="skill-element-empty" th:unless="${#lists.size(frontend)}">
+                    <div>기술을 등록해주세요</div>
+                </div>
+                <ul th:if="${#lists.size(frontend)}">
+                    <li th:each="item: ${frontend}" th:text="${item}"></li>
+                </ul>
+            </div>
+            <div class="skill-element">
+                <div class="skill-element-title">Back-End</div>
+                <div class="skill-element-empty" th:unless="${#lists.size(backend)}">
+                    <div>기술을 등록해주세요</div>
+                </div>
+                <ul th:if="${#lists.size(backend)}">
+                    <li th:each="item: ${backend}" th:text="${item}"></li>
+                </ul>
+            </div>
+            <div class="skill-element">
+                <div class="skill-element-title">Tools</div>
+                <div class="skill-element-empty" th:unless="${#lists.size(tools)}">
+                    <div>기술을 등록해주세요</div>
+                </div>
+                <ul th:if="${#lists.size(tools)}">
+                    <li th:each="item: ${tools}" th:text="${item}"></li>
+                </ul>
+            </div>
+            <div class="skill-element">
+                <div class="skill-element-title">Mobile</div>
+                <div class="skill-element-empty" th:unless="${#lists.size(mobile)}">
+                    <div>기술을 등록해주세요</div>
+                </div>
+                <ul th:if="${#lists.size(mobile)}">
+                    <li th:each="item: ${mobile}" th:text="${item}"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

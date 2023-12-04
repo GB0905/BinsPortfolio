@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="css">
+    <style>
+        .project-container {
+            margin: 0 30px;
+            width: calc(100% - 60px);
+        }
+        .project-container-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 50px 0;
+        }
+        .project-container-title {
+            font-size: 32px;
+            font-weight: 600;
+        }
+        .upload-btn {
+            background: #818181;
+            border: 1px solid #818181;
+            width: 100px;
+            height: 40px;
+            border-radius: 25px;
+            color: #ffffff;
+        }
+        .upload-btn:hover {
+            background: #ffffff;
+            color: #818181;
+            border: 1px solid #818181;
+        }
+        .project {
+            display: flex;
+            width: 100%;
+            margin: 0 auto 50px;
+            height: 370px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .project-img {
+            width: 370px;
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .project-img img {
+            width: 100%;
+            height: 100%;
+            margin-bottom : 10px;
+            object-fit: cover;
+        }
+        .project-date {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: calc(100% - 300px);
+        }
+        .icon-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            background: none;
+        }
+        .icon-btn img {
+            width: 100%;
+            height: auto;
+        }
+        .project-main {
+            padding: 5px 20px;
+            width: 100%;
+            position: relative;
+        }
+        .project-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            height: 12%;
+            width: calc(100% - 50px);
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+        }
+        .project-element {
+            display: flex;
+            margin: 5px 0;
+            max-height: 38%;
+            min-height: 11%;
+        }
+        .project-element-title {
+            width: 100px;
+            font-weight: 600;
+        }
+        .btn-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+        }
+        .pdf-btn {
+            position: absolute;
+            width: 200px;
+            bottom: 0;
+            right: 0;
+            height: 12%;
+        }
+        .pagination {
+            justify-content: center;
+        }
+        .page-link {
+            color: #818181;
+            border-color: #818181;
+        }
+        .page-link:hover {
+            background: #ccc;
+            color: #818181;
+            border-color: #818181;
+        }
+        .page-link.active:hover {
+            color: #fff;
+            background: #818181;
+            border-color: #818181;
+        }
+        .page-link:focus {
+            z-index: 3;
+            color: #818181;
+            border-color: #818181;;
+            outline: 0;
+            box-shadow: none;
+        }
+        .page-link.active {
+            background: #818181;
+            border-color: #818181;
+        }
+        .project-container-main {
+            height: 100%;
+            min-height: 460px;
+        }
+        .project-element-intro {
+            width: calc(100% - 100px);
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+        }
+        .project-element-skill {
+            width: calc(100% - 100px);
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="project-container">
+        <div class="project-container-top">
+            <div class="project-container-title">Project's</div>
+            <button type="button" class="btn upload-btn" onClick="location.href='/project/new'"><strong>+</strong> Upload</button>
+        </div>
+        <div class="project-container-main" th:if="${data.isEmpty()}">
+            <div>등록된 프로젝트가 없습니다</div>
+        </div>
+        <div class="project" th:each="item: ${data}">
+            <div class="project-side">
+                <a th:href="@{${item.link}}">
+                    <div class="project-img">
+                        <img class="project-image" th:src="@{${item.image.imgUrl}}" />
+                    </div>
+                </a>
+                <div class="project-date">
+                    <div th:text="${#dates.format(item.startDate, 'yyyy-MM')}"></div>
+                    <div>&nbsp;~&nbsp;</div>
+                    <div th:text="${item.endDate}"></div>
+                </div>
+            </div>
+
+            <div class="project-main">
+                <div class="btn-container">
+                    <button class="icon-btn" th:onclick="|location.href='@{/project/{id}(id=${item.getId()})}/edit'|" type="button">
+                        <img src="icon/edit icon.png" />
+                    </button>
+                    <form class th:action="@{/project/delete/{id}(id=${item.getId()})}" th:method="post" >
+                        <button class="icon-btn" type="submit">
+                            <img src="icon/delete icon.png" />
+                        </button>
+                    </form>
+                </div>
+                <div class="project-title" th:text="${item.title}"></div>
+                <div class="project-element">
+                    <div class="project-element-title">소개</div>
+                    <div class="project-element-intro"  th:utext="${#strings.replace(item.introduction, nlString, '&lt;br /&gt;')}"></div>
+                </div>
+                <div class="project-element">
+                    <div class="project-element-title">기술</div>
+                    <div class="project-element-skill"  th:utext="${#strings.replace(item.skills, nlString, '&lt;br /&gt;')}"></div>
+                </div>
+
+                <a th:href="@{${item.path}}" class="btn btn-outline-secondary rounded-pill pdf-btn" download>PDF 다운로드</a>
+            </div>
+        </div>
+        <nav aria-label="Page navigation example" th:unless="${data.isEmpty()}">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" th:href="@{/projects(page=1)}">First</a></li>
+                <li class="page-item"><a class="page-link" th:href="${data.first} ? '#' : @{/projects(page=${data.number})}">Previous</a></li>
+                <li class="page-item" th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                    <span th:if="${page == data.number + 1}" class="page-link active" th:text="${page}"></span>
+                    <a th:unless="${page == data.number + 1}" class="page-link"  th:href="@{/projects(page=${page})}" th:text="${page}"></a>
+                </li>
+                <li class="page-item"><a class="page-link" th:href="${data.last} ? '#' : @{/projects(page=${data.number + 2})}">Next</a></li>
+                <li class="page-item"><a class="page-link" th:href="@{/projects(page=${data.totalPages})}">End</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+</html>
